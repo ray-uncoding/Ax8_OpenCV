@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self.detection_label = QLabel("Detection Feed")
         self.detection_label.setAlignment(Qt.AlignCenter)
         self.detection_label.setStyleSheet("background-color: #000; color: #FFF;")
-        self.detection_label.setScaledContents(True)  # 啟用影像縮放
+        self.detection_label.setScaledContents(False)  # 禁用內容縮放，改用手動縮放
         self.main_layout.addWidget(self.detection_label)
 
         # 下方：參數顯示區域
@@ -63,4 +63,10 @@ class MainWindow(QMainWindow):
 
     def update_detection_feed(self, pixmap):
         if pixmap is not None:
-            self.detection_label.setPixmap(pixmap)
+            # 縮放影像以保持寬高比
+            scaled_pixmap = pixmap.scaled(
+                self.detection_label.size(),  # QLabel 的大小
+                Qt.KeepAspectRatio,          # 保持寬高比
+                Qt.SmoothTransformation      # 平滑縮放
+            )
+            self.detection_label.setPixmap(scaled_pixmap)

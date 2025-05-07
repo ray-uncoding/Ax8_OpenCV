@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 import cv2
 from ax8_legcy.ax8_manager import AX8Manager
 import time
+from ..utils.data_processor import FPSCounter
 
 class CameraWidget(QWidget):
     detection_feed_signal = pyqtSignal(QPixmap)
@@ -21,9 +22,7 @@ class CameraWidget(QWidget):
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
 
-        # 初始化 FPS 計算
-        self.frame_count = 0
-        self.start_time = time.time()
+        self.fps_counter = FPSCounter()  # 初始化 FPS 計算器
 
     def start_camera(self):
         if self.ax8_manager.login():
@@ -55,10 +54,8 @@ class CameraWidget(QWidget):
                 self.detection_feed_signal.emit(detection_pixmap)
                 self.inference_time_signal.emit(results[0].speed['inference'])
 
-                # 計算 FPS
-                self.frame_count += 1
-                elapsed_time = time.time() - self.start_time
-                fps = self.frame_count / elapsed_time if elapsed_time > 0 else 0
+                # 使用 FPSCounter 計算 FPS
+                fps = self.fps_counter.update()
                 self.fps_signal.emit(fps)
         except Exception as e:
             print(f"[CameraWidget] 更新畫面時發生錯誤: {e}")

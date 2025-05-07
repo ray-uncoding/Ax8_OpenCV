@@ -1,4 +1,21 @@
+import time
 from datetime import datetime
+
+class FPSCounter:
+    def __init__(self):
+        self.start_time = time.time()
+        self.frame_count = 0
+
+    def update(self):
+        """更新幀數並計算 FPS"""
+        self.frame_count += 1
+        elapsed_time = time.time() - self.start_time
+        return self.frame_count / elapsed_time if elapsed_time > 0 else 0
+
+    def reset(self):
+        """重置 FPS 計算"""
+        self.start_time = time.time()
+        self.frame_count = 0
 
 def calculate_fps(start_time, frame_count):
     """
