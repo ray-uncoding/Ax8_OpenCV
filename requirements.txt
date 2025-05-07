@@ -1,5 +1,23 @@
+# PyQt5 用於構建 GUI
 PyQt5
+
+# OpenCV 用於影像處理
 opencv-python
+
+# NumPy 用於數據處理
 numpy
+
+# Requests 用於 HTTP 請求
 requests
+
+# PyQtGraph 用於繪圖（如果有使用）
 pyqtgraph
+
+# YOLO 模型的支援庫
+ultralytics
+
+# 日誌記錄和 CSV 操作
+pandas
+
+# 測試和開發工具（可選）
+pytest

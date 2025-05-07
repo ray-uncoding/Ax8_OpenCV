@@ -1,167 +1,165 @@
-# AX8 Camera Project
+# Ax8_OpenCV
 
-## Overview
-The AX8 Camera Project is a PyQt-based application designed to interface with the AX8 camera system. It provides a modular and extensible architecture for real-time video streaming, object detection, and system monitoring. The project leverages PyQt for the user interface, YOLO for object detection, and utility modules for data processing and logging.
+## 概述
+Ax8_OpenCV 是一個基於 PyQt 的應用程式，用於與 AX8 相機系統進行互動。該專案提供模組化且可擴展的架構，支援即時影像串流、物件偵測以及系統監控。專案使用 PyQt 作為使用者介面框架，YOLO 作為物件偵測模型，並包含多個實用工具模組來處理數據與記錄。
 
 ---
 
-## Project Structure
+## 專案結構
 ```
-ax8_project
-├── main.py                     # Entry point for the application
+Ax8_OpenCV
+├── main.py                     # 應用程式的進入點
 ├── src
 │   ├── config
-│   │   └── yolov8n.pt          # YOLO model file
+│   │   └── yolov8n.pt          # YOLO 模型檔案
 │   ├── core
-│   │   ├── ax8_manager.py      # Manages camera connection, image fetching, and session handling
-│   │   ├── ax8_worker.py       # Handles threaded operations for image streaming
-│   │   ├── yolo_processor.py   # Encapsulates YOLO model for object detection
+│   │   ├── ax8_manager.py      # 管理相機連線、影像抓取與會話處理
+│   │   ├── ax8_worker.py       # 處理影像串流的執行緒操作
+│   │   ├── yolo_processor.py   # 封裝 YOLO 模型進行物件偵測
 │   ├── ui
-│   │   ├── main_window.py      # Main application window
-│   │   ├── camera_widget.py    # Widget for displaying camera feed and detection results
-│   │   └── status_bar.py       # Status bar showing connection and detection info
+│   │   ├── main_window.py      # 主應用程式視窗
+│   │   ├── camera_widget.py    # 顯示相機影像與偵測結果的元件
+│   │   └── status_bar.py       # 顯示連線與偵測資訊的狀態列
 │   ├── utils
-│   │   ├── data_processor.py   # Utility for FPS calculation
-│   │   ├── logger.py           # Configurable logging setup
-│   │   └── parameter_logger.py # Logs detection parameters to a CSV file
-│   └── resources
-│       └── styles.qss          # Stylesheet for UI components
-├── requirements.txt            # Project dependencies
-├── .gitignore                  # Git ignore rules
-└── README.md                   # Project documentation
+│   │   ├── data_processor.py   # 計算 FPS 的工具
+│   │   ├── logger.py           # 可配置的日誌記錄模組
+│   │   └── parameter_logger.py # 將偵測參數記錄到 CSV 檔案
+├── requirements.txt            # 專案依賴項
+├── .gitignore                  # Git 忽略規則
+└── README.md                   # 專案文件
 ```
 
 ---
 
-## Installation
+## 安裝
 
-### Prerequisites
-- Python 3.8 or higher
-- pip (Python package manager)
+### 先決條件
+- Python 3.8 或更高版本
+- pip（Python 套件管理工具）
 
-### Steps
-1. Clone the repository:
+### 安裝步驟
+1. 複製此專案：
    ```bash
    git clone <repository-url>
-   cd ax8_project
+   cd Ax8_OpenCV
    ```
 
-2. Install the required dependencies:
+2. 安裝所需的依賴項：
    ```bash
    pip install -r requirements.txt
    ```
 
-3. (Optional) Set up a virtual environment:
+3. （可選）建立虛擬環境：
    ```bash
    python -m venv env
-   source env/bin/activate  # On Windows: env\Scripts\activate
+   source env/bin/activate  # Windows 系統使用：env\Scripts\activate
    ```
 
 ---
 
-## Usage
+## 使用方式
 
-To run the application, execute the following command:
+執行以下指令啟動應用程式：
 ```bash
 python main.py
 ```
 
-This will launch the PyQt application, allowing you to connect to the AX8 camera and view the live feed along with relevant data.
+啟動後，應用程式將顯示 PyQt 視窗，允許您連接到 AX8 相機並查看即時影像與相關數據。
 
 ---
 
-## System Architecture and Workflow
+## 系統架構與工作流程
 
-### **1. Camera Connection and Image Fetching**
-- **Module**: `ax8_manager.py`
-- **Description**: 
-  - Manages the connection to the AX8 camera.
-  - Handles login, image fetching, and session keep-alive through a dedicated thread.
-- **Key Methods**:
-  - `login()`: Authenticates with the camera.
-  - `fetch_frame()`: Fetches the latest frame from the camera.
-  - `start_keep_alive()`: Maintains the session by sending periodic requests.
+### **1. 相機連線與影像抓取**
+- **模組**：`ax8_manager.py`
+- **描述**：
+  - 管理與 AX8 相機的連線。
+  - 處理登入、影像抓取以及透過執行緒維持會話。
+- **關鍵方法**：
+  - `login()`: 驗證相機的使用者名稱與密碼。
+  - `fetch_frame()`: 抓取相機的最新影像。
+  - `start_keep_alive()`: 透過定期請求維持會話。
 
-### **2. Image Streaming and Processing**
-- **Module**: `ax8_worker.py`
-- **Description**: 
-  - Runs a threaded worker to fetch frames continuously.
-  - Emits signals to update the UI with the latest frames and connection status.
-- **Key Signals**:
-  - `image_update`: Sends the latest frame to the UI.
-  - `connection_status`: Updates the connection status in the status bar.
+### **2. 影像串流與處理**
+- **模組**：`ax8_worker.py`
+- **描述**：
+  - 啟動執行緒以持續抓取影像。
+  - 發送信號更新 UI，顯示最新影像與連線狀態。
+- **關鍵信號**：
+  - `image_update`: 傳遞最新影像到 UI。
+  - `connection_status`: 更新狀態列中的連線狀態。
 
-### **3. YOLO Object Detection**
-- **Module**: `yolo_processor.py`
-- **Description**: 
-  - Encapsulates the YOLO model for object detection.
-  - Processes each frame to detect objects and returns detection results.
-- **Key Method**:
-  - `predict(frame)`: Runs YOLO inference on the given frame.
+### **3. YOLO 物件偵測**
+- **模組**：`yolo_processor.py`
+- **描述**：
+  - 封裝 YOLO 模型進行物件偵測。
+  - 處理每一幀影像並返回偵測結果。
+- **關鍵方法**：
+  - `predict(frame)`: 對輸入影像進行 YOLO 推論。
 
-### **4. User Interface**
-- **Modules**: `main_window.py`, `camera_widget.py`, `status_bar.py`
-- **Description**:
-  - **`main_window.py`**: The main application window that integrates all UI components.
-  - **`camera_widget.py`**: Displays the camera feed and overlays detection results.
-  - **`status_bar.py`**: Shows connection status, FPS, and detection parameters.
-- **Workflow**:
-  1. `CameraWidget` fetches frames from `AX8Worker`.
-  2. Frames are passed to `YOLOProcessor` for detection.
-  3. Detection results are displayed on the UI.
+### **4. 使用者介面**
+- **模組**：`main_window.py`, `camera_widget.py`, `status_bar.py`
+- **描述**：
+  - **`main_window.py`**：整合所有 UI 元件的主應用程式視窗。
+  - **`camera_widget.py`**：顯示相機影像並疊加偵測結果。
+  - **`status_bar.py`**：顯示連線狀態、FPS 與偵測參數。
+- **工作流程**：
+  1. `CameraWidget` 從 `AX8Worker` 抓取影像。
+  2. 將影像傳遞給 `YOLOProcessor` 進行偵測。
+  3. 在 UI 上顯示偵測結果。
 
-### **5. Utility Modules**
-- **Modules**: `data_processor.py`, `logger.py`, `parameter_logger.py`
-- **Description**:
-  - **`data_processor.py`**: Calculates FPS for the video stream.
-  - **`logger.py`**: Configures logging for debugging and monitoring.
-  - **`parameter_logger.py`**: Logs detection parameters (e.g., FPS, inference time) to a CSV file.
-
----
-
-## Features
-
-### **1. Real-Time Camera Feed**
-- Displays a live video stream from the AX8 camera.
-- Supports real-time object detection using YOLO.
-
-### **2. Connection Monitoring**
-- Visual indicators for connection status.
-- Automatic session keep-alive to prevent disconnection.
-
-### **3. FPS Monitoring**
-- Calculates and displays frames per second for the video stream.
-
-### **4. Object Detection**
-- Integrates YOLO for detecting objects in the video stream.
-- Displays detection results (e.g., bounding boxes, labels) on the video feed.
-
-### **5. Parameter Logging**
-- Logs FPS and inference time to a CSV file for performance analysis.
+### **5. 工具模組**
+- **模組**：`data_processor.py`, `logger.py`, `parameter_logger.py`
+- **描述**：
+  - **`data_processor.py`**：計算影像串流的 FPS。
+  - **`logger.py`**：配置日誌記錄，用於除錯與監控。
+  - **`parameter_logger.py`**：將 FPS 與推論時間記錄到 CSV 檔案。
 
 ---
 
-## Development Notes
+## 功能
 
-### **1. Adding a New YOLO Model**
-- Update the `YOLOProcessor` class with the new model path.
-- Ensure the model is compatible with the `ultralytics` library.
+### **1. 即時相機影像**
+- 顯示來自 AX8 相機的即時影像串流。
+- 支援使用 YOLO 進行即時物件偵測。
 
-### **2. Debugging**
-- Use the `logger.py` module to enable detailed logging.
-- Logs are stored in a rotating file to prevent excessive disk usage.
+### **2. 連線監控**
+- 提供連線狀態的視覺化指示。
+- 自動維持會話，防止連線中斷。
 
-### **3. Extending the System**
-- To support multiple cameras:
-  - Instantiate multiple `AX8Manager` and `CameraWidget` objects.
-  - Use a tabbed interface in `main_window.py` to switch between cameras.
+### **3. FPS 監控**
+- 計算並顯示影像串流的每秒幀數。
+
+### **4. 物件偵測**
+- 整合 YOLO 模型，對影像中的物件進行偵測。
+- 在影像上顯示偵測結果（如邊界框與標籤）。
+
+### **5. 參數記錄**
+- 將 FPS 與推論時間記錄到 CSV 檔案，便於後續分析。
 
 ---
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
+## 開發筆記
+
+### **1. 新增 YOLO 模型**
+- 更新 `yolo_processor.py` 中的模型路徑。
+- 確保模型與 `ultralytics` 庫相容。
+
+### **2. 除錯**
+- 使用 `logger.py` 模組啟用詳細日誌記錄。
+- 日誌將存儲於循環檔案中，避免磁碟空間不足。
+
+### **3. 系統擴展**
+- 若需支援多相機：
+  - 建立多個 `AX8Manager` 與 `CameraWidget` 實例。
+  - 在 `main_window.py` 中使用分頁介面切換相機。
 
 ---
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for more details.
+## 貢獻
+歡迎貢獻！請提交 Pull Request 或開啟 Issue 來提出改進建議或修復問題。
+
+---
+
+## 授權
+此專案採用 MIT 授權條款。詳情請參閱 LICENSE 文件。
