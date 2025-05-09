@@ -1,10 +1,5 @@
 from src.ui.main_window import MainWindow
-from src.camera.camera_controller import CameraController
-from src.face_recognition.recognition_worker import RecognitionWorker
-from src.signal_processing.signal_handler import SignalHandler
-from src.utils.signal_manager import SignalManager
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QThread
 import sys
 
 class App:

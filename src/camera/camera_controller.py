@@ -35,7 +35,7 @@ class CameraController(QObject):
         while self.running:
             ret, frame = self.capture.read()
             if ret:
-                self.frame_signal.emit(frame)
+                self.signal_manager.frame_signal.emit(frame)
             else:
                 self.heartbeat_signal.emit(False)
             time.sleep(0.03)  # Simulate frame processing delay

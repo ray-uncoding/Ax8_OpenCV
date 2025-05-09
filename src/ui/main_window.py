@@ -110,9 +110,15 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         # 停止執行緒
+        self.camera_controller.stop_camera()
+        self.camera_thread.quit()
+        self.camera_thread.wait()
+
         self.recognition_worker.stop()
         self.recognition_thread.quit()
         self.recognition_thread.wait()
+
         self.signal_thread.quit()
         self.signal_thread.wait()
+
         super().closeEvent(event)

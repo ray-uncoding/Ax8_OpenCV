@@ -1,4 +1,2 @@
-from .signal_handler import SignalHandler
+# This file is intentionally left blank.
 
-# Initialize the signal processing module
-signal_handler = SignalHandler()

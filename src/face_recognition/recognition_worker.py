@@ -29,11 +29,11 @@ class RecognitionWorker(QObject):
                 # Perform face detection (dummy implementation)
                 faces = self.detect_faces(frame)
                 if faces:
-                    self.face_detected_signal.emit(faces)
-                    self.detection_feed_signal.emit(frame)
+                    self.signal_manager.face_recognition_signal.emit(faces)
+                    self.signal_manager.frame_signal.emit(frame)
                 # Emit FPS and inference time (dummy values)
-                self.fps_signal.emit(30.0)
-                self.inference_time_signal.emit(100.0)
+                self.signal_manager.fps_signal.emit(30.0)
+                self.signal_manager.inference_time_signal.emit(100.0)
 
     def detect_faces(self, frame):
         # Dummy face detection logic
